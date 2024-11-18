@@ -1,6 +1,6 @@
 (setq inhibit-startup-message t)
 
-; --- Simplify UI --- ;
+;; Simplify UI
 
 (scroll-bar-mode -1)    ; Disable visible scrollbar
 (tool-bar-mode -1)      ; Disable the toolbar
@@ -9,14 +9,13 @@
 
 (menu-bar-mode -1)      ; Disable the menu bar
 
-;; (set-frame-font "RobotoMono Nerd Font 140" nil t)
+;; Set font
 (add-to-list 'default-frame-alist '(font . "Iosevka Nerd Font 14"))
 
 ;; Line number
 (setq display-line-numbers-width 3) ; Adjust the number as needed
 (add-hook 'prog-mode-hook (lambda ()
-                            (setq display-line-numbers-type 'relative)
-                            (display-line-numbers-mode 1)))
+                            (setq display-line-numbers-type 'relative)))
 
 ;; Stop the screen shifting
 (setq display-line-numbers-width-start t)
@@ -30,16 +29,13 @@
 ;; Optional: Disable scroll acceleration
 (setq scroll-step 1)
 
-; Set theme
-(load-theme 'wombat)
-
 ;; Disable backup files
 (setq make-backup-files nil)
 
-; Esc to quit
+;; Esc to quit
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
-; --- Initialize Packages --- ;
+;; Initialize Packages
 
 (require 'package)
 
@@ -52,13 +48,13 @@
   (package-refresh-contents))
 
 ;; Initialize packages for non-linux platforms
-;(unless (package-installed-p 'use-package)
-;  (package-install 'use-package))
+					;(unless (package-installed-p 'use-package)
+					;  (package-install 'use-package))
 
 (require 'use-package)
 (setq use-package-always-ensure t)
 
-; --- Install Packages --- ;
+;; Install Packages
 
 (use-package ivy
   :diminish
@@ -78,6 +74,11 @@
   :config
   (ivy-mode 1))
 
+;; Description for commands
+(use-package ivy-rich
+  :init
+  (ivy-rich-mode 1))
+
 (use-package counsel
   :bind (("M-x" . counsel-M-x)
 	 ("C-x b" . counsel-ibuffer)
@@ -86,6 +87,17 @@
 	 ("C-r" . 'counsel-minibuffer-history))
   :config
   (setq ivy-initial-inputs-alist nil)) ; don't start searches with ^
+
+(use-package helpful
+  :ensure t
+  :custom
+  (counsel-describe-function-function #'helpful-callable)
+  (counsel-describe-variable-function #'helpful-variable)
+  :bind
+  ([remap describe-function] . counsel-describe-function)
+  ([remap describe-variable] . counsel-describe-variable)
+  ([remap describe-command] . helpful-command)
+  ([remap describe-key] . helpful-key))
 
 (use-package evil
   :ensure t
@@ -108,6 +120,13 @@
   (define-key evil-normal-state-map (kbd "C-u") 'my-scroll-half-page-up-and-recenter)
   (evil-mode 1))  ; Enable evil-mode globally
 
+(use-package doom-themes
+  :ensure t
+  ;; Transparent backgrourd
+  :config
+  (add-to-list 'default-frame-alist '(alpha-background . 70))
+  (load-theme 'doom-tokyo-night t))
+
 (use-package doom-modeline
   :ensure t
   :hook (after-init . doom-modeline-mode)
@@ -123,13 +142,27 @@
   (doom-modeline-env-version t) ; Show environment version (e.g., Python version)
   (doom-modeline-lsp t) ; Show LSP status
   (doom-modeline-vcs-max-length 20)) ; Set max length for version control info
+
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+
+(use-package which-key
+  :init (which-key-mode)
+  :diminish which-key-mode
+  :config
+  (setq which-key-idle-delay 0.5))
+
+;; Custom set variables
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("456697e914823ee45365b843c89fbc79191fdbaff471b29aad9dcbe0ee1d5641" "014cb63097fc7dbda3edf53eb09802237961cbb4c9e9abd705f23b86511b0a69" "48042425e84cd92184837e01d0b4fe9f912d875c43021c3bcb7eeb51f1be5710" "4594d6b9753691142f02e67b8eb0fda7d12f6cc9f1299a49b819312d6addad1d" default))
  '(delete-selection-mode nil)
- '(package-selected-packages '(doom-modeline evil counsel ivy)))
+ '(package-selected-packages
+   '(doom-themes helpful ivy-rich which-key rainbow-delimiters doom-modeline evil counsel ivy)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
