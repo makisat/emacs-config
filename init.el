@@ -13,8 +13,8 @@
 (add-to-list 'default-frame-alist '(font . "Iosevka Nerd Font 14"))
 
 ;; Line number
-(setq display-line-numbers-width 3) ; Adjust the number as needed
 (add-hook 'prog-mode-hook (lambda ()
+			    (global-display-line-numbers-mode t)
                             (setq display-line-numbers-type 'relative)))
 
 ;; Stop the screen shifting
