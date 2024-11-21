@@ -74,6 +74,28 @@
   :config
   (ivy-mode 1))
 
+
+(use-package general
+  :ensure t
+  :config
+  ;; Create a leader key
+  (general-create-definer my-leader-def
+    :keymaps '(normal visual emacs)
+    :prefix "SPC")
+
+  ;; Bind some global keys
+  (my-leader-def
+    "." '(counsel-find-file :which-key "find file")
+    "fs" '(save-buffer :which-key "save file")
+    "b"  '(:ignore t :which-key "buffers")
+    "bb" '(counsel-switch-buffer :which-key "switch buffer")
+    "bp" '(previous-buffer :which-key "previous buffer")
+    "bk" '(kill-buffer :which-key "kill buffer")
+    "w"  '(:ignore t :which-key "windows")
+    "wv" '(split-window-below :which-key "split below")
+    "ws" '(split-window-right :which-key "split right")
+    "wc" '(delete-window :which-key "close window")))
+
 ;; Description for commands
 (use-package ivy-rich
   :init
