@@ -178,6 +178,46 @@
   :hook (prog-mode . rainbow-delimiters-mode))
 
 
+;; Org-mode basic setup
+(use-package org
+  :ensure t
+  :config
+  ;; org agenda file
+  (setq org-agenda-files '("~/Sync/org/todos.org"))
+
+  ;; Enable org-indent mode by default
+  (setq org-startup-indented t)
+
+  ;; Automatically wrap lines in org-mode
+  (setq org-startup-truncated nil)
+
+  ;; Enable syntax highlighting for source blocks
+  (setq org-src-fontify-natively t)
+
+  ;; Enable editing of source code blocks
+  (setq org-edit-src-content-indentation 2)
+
+  ;; Keybindings for Org Mode
+  :bind (("C-c c" . org-capture)
+         ("C-c a" . org-agenda)
+         ("C-c l" . org-store-link)))
+
+;; Use org-modern for better Org Mode visuals
+(use-package org-modern
+  :ensure t
+  :hook ((org-mode . org-modern-mode)
+         (org-agenda-finalize . org-modern-agenda))
+  :config
+  ;; Customize org-modern settings
+  (setq org-modern-star '("•" "◦" "▸")    ;; Customize bullet points
+        org-modern-label-border 0.2)       ;; Add padding to labels
+	;org-modern-table nil              ;; Disable table enhancement if you prefer plain tables
+        ; org-modern-todo nil               ;; Keep the default TODO styles
+        ;org-modern-progress nil           ;; Disable progress bars if not needed
+        ;org-modern-priority nil)          ;; Disable priority enhancement
+  ;; Adjust line spacing for better readability
+  (setq line-spacing 0.2))
+
 ;; Custom set variables
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -188,7 +228,7 @@
    '("456697e914823ee45365b843c89fbc79191fdbaff471b29aad9dcbe0ee1d5641" "014cb63097fc7dbda3edf53eb09802237961cbb4c9e9abd705f23b86511b0a69" "48042425e84cd92184837e01d0b4fe9f912d875c43021c3bcb7eeb51f1be5710" "4594d6b9753691142f02e67b8eb0fda7d12f6cc9f1299a49b819312d6addad1d" default))
  '(delete-selection-mode nil)
  '(package-selected-packages
-   '(doom-themes helpful ivy-rich which-key rainbow-delimiters doom-modeline evil counsel ivy)))
+   '(org-modern doom-themes helpful ivy-rich which-key rainbow-delimiters doom-modeline evil counsel ivy)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
