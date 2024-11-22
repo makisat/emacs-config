@@ -119,7 +119,7 @@
   :ensure t
   :init
   (setq evil-want-integration t)
-  (setq evil-want-keybinding t)
+  (setq evil-want-keybinding nil)
   (setq evil-undo-system 'undo-redo)
   :config
   ;; Scrolling
