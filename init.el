@@ -35,6 +35,9 @@
 ;; Esc to quit
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
+;; org agenda file
+(setq org-agenda-files '("~/Sync/org/todos.org"))
+
 ;; Initialize Packages
 
 (require 'package)
