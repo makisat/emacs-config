@@ -120,7 +120,7 @@
   :init
   (setq evil-want-integration t)
   (setq evil-want-keybinding t)
-  (setq evil-want-integration t)
+  (setq evil-undo-system 'undo-redo)
   :config
   ;; Scrolling
   (defun my-scroll-half-page-down-and-recenter ()
