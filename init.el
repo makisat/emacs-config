@@ -74,6 +74,25 @@
   :config
   (ivy-mode 1))
 
+;; Description for commands
+(use-package ivy-rich
+  :init
+  (ivy-rich-mode 1))
+
+(use-package counsel
+  :bind (("M-x" . counsel-M-x)
+	 ("C-x b" . counsel-ibuffer)
+	 ("C-x C-f" . counsel-find-file)
+	 :map minibuffer-local-map
+	 ("C-r" . 'counsel-minibuffer-history))
+  :config
+  (setq ivy-initial-inputs-alist nil)) ; don't start searches with ^
+
+(use-package which-key
+  :init (which-key-mode)
+  :diminish which-key-mode
+  :config
+  (setq which-key-idle-delay 0.5))
 
 (use-package general
   :ensure t
@@ -96,33 +115,12 @@
     "ws" '(split-window-right :which-key "split right")
     "wc" '(delete-window :which-key "close window")))
 
-;; Description for commands
-(use-package ivy-rich
-  :init
-  (ivy-rich-mode 1))
-
-(use-package counsel
-  :bind (("M-x" . counsel-M-x)
-	 ("C-x b" . counsel-ibuffer)
-	 ("C-x C-f" . counsel-find-file)
-	 :map minibuffer-local-map
-	 ("C-r" . 'counsel-minibuffer-history))
-  :config
-  (setq ivy-initial-inputs-alist nil)) ; don't start searches with ^
-
-(use-package helpful
-  :ensure t
-  :custom
-  (counsel-describe-function-function #'helpful-callable)
-  (counsel-describe-variable-function #'helpful-variable)
-  :bind
-  ([remap describe-function] . counsel-describe-function)
-  ([remap describe-variable] . counsel-describe-variable)
-  ([remap describe-command] . helpful-command)
-  ([remap describe-key] . helpful-key))
-
 (use-package evil
   :ensure t
+  :init
+  (setq evil-want-integration t)
+  (setq evil-want-keybinding t)
+  (setq evil-want-integration t)
   :config
   ;; Scrolling
   (defun my-scroll-half-page-down-and-recenter ()
@@ -141,6 +139,17 @@
   (define-key evil-normal-state-map (kbd "C-d") 'my-scroll-half-page-down-and-recenter)
   (define-key evil-normal-state-map (kbd "C-u") 'my-scroll-half-page-up-and-recenter)
   (evil-mode 1))  ; Enable evil-mode globally
+
+(use-package helpful
+  :ensure t
+  :custom
+  (counsel-describe-function-function #'helpful-callable)
+  (counsel-describe-variable-function #'helpful-variable)
+  :bind
+  ([remap describe-function] . counsel-describe-function)
+  ([remap describe-variable] . counsel-describe-variable)
+  ([remap describe-command] . helpful-command)
+  ([remap describe-key] . helpful-key))
 
 (use-package doom-themes
   :ensure t
@@ -168,11 +177,6 @@
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
-(use-package which-key
-  :init (which-key-mode)
-  :diminish which-key-mode
-  :config
-  (setq which-key-idle-delay 0.5))
 
 ;; Custom set variables
 (custom-set-variables
