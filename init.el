@@ -14,7 +14,7 @@
 
 ;; Line number
 (add-hook 'prog-mode-hook (lambda ()
-			    (global-display-line-numbers-mode t)
+			                (global-display-line-numbers-mode t)
                             (setq display-line-numbers-type 'relative)))
 
 ;; Stop the screen shifting
@@ -35,22 +35,27 @@
 ;; Esc to quit
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
+;; Tab and indetation
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
+(setq indent-line-function 'insert-tab)
+
 ;; Initialize Packages
 
 (require 'package)
 
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-			 ("melpa-stable" . "https://stable.melpa.org/packages/")
-			 ("org" . "https://orgmode.org/elpa/")
-			 ("elpa" . "https://elpa.gnu.org/packages/")))
+                         ("melpa-stable" . "https://stable.melpa.org/packages/")
+                         ("org" . "https://orgmode.org/elpa/")
+                         ("elpa" . "https://elpa.gnu.org/packages/")))
 
 (package-initialize)
 (unless package-archive-contents
   (package-refresh-contents))
 
 ;; Initialize packages for non-linux platforms
-					;(unless (package-installed-p 'use-package)
-					;  (package-install 'use-package))
+                                        ;(unless (package-installed-p 'use-package)
+                                        ;  (package-install 'use-package))
 
 (require 'use-package)
 (setq use-package-always-ensure t)
@@ -60,18 +65,18 @@
 (use-package ivy
   :diminish
   :bind (("C-s" . swiper)
-	 :map ivy-minibuffer-map
-	 ("TAB" . ivy-alt-done)
-	 ("C-l" . ivy-alt-done)
-	 ("C-j" . ivy-next-line)
-	 ("C-k" . ivy-previous-line)
-	 :map ivy-switch-buffer-map
-	 ("C-k" . ivy-previous-line)
-	 ("C-l" . ivy-done)
-	 ("C-d" . ivy-switch-buffer-kill)
-	 :map ivy-reverse-i-search-map
-	 ("C-k" . ivy-previous-line)
-	 ("C-d" . ivy-reverse-i-seaarch-kill))
+	     :map ivy-minibuffer-map
+	     ("TAB" . ivy-alt-done)
+	     ("C-l" . ivy-alt-done)
+	     ("C-j" . ivy-next-line)
+	     ("C-k" . ivy-previous-line)
+	     :map ivy-switch-buffer-map
+	     ("C-k" . ivy-previous-line)
+	     ("C-l" . ivy-done)
+	     ("C-d" . ivy-switch-buffer-kill)
+	     :map ivy-reverse-i-search-map
+	     ("C-k" . ivy-previous-line)
+	     ("C-d" . ivy-reverse-i-seaarch-kill))
   :config
   (ivy-mode 1))
 
@@ -82,10 +87,10 @@
 
 (use-package counsel
   :bind (("M-x" . counsel-M-x)
-	 ("C-x b" . counsel-ibuffer)
-	 ("C-x C-f" . counsel-find-file)
-	 :map minibuffer-local-map
-	 ("C-r" . 'counsel-minibuffer-history))
+	     ("C-x b" . counsel-ibuffer)
+	     ("C-x C-f" . counsel-find-file)
+	     :map minibuffer-local-map
+	     ("C-r" . 'counsel-minibuffer-history))
   :config
   (setq ivy-initial-inputs-alist nil)) ; don't start searches with ^
 
@@ -187,8 +192,22 @@
 ;; Org-mode basic setup
 (use-package org
   :ensure t
+  :init
+  (setq org-agenda-span 'week
+	    org-agenda-start-day "+0d"
+	    org-agenda-show-all-dates t ;; Show all dates in agenda
+        org-agenda-start-on-weekday nil ;; Ensure custom start-day works
+	    org-agenda-window-setup 'current-window ;; Open agenda in the current window
+        org-agenda-hide-tags-regexp ".*"
+	    org-agenda-skip-scheduled-if-done t
+	    org-agenda-skip-deadline-if-done t
+	    org-agenda-skip-timestamp-if-done t
+	    org-agenda-skip-scheduled-if-deadline-is-shown t
+	    org-agenda-skip-timestamp-if-deadline-is-shown t)
+  
   :hook ((org-agenda-mode . olivetti-mode)
-	 (org-agenda-mode . (lambda () (display-line-numbers-mode 0))))
+	     (org-agenda-mode . (lambda () (display-line-numbers-mode 0))))
+
   :config
   ;; org agenda file
   (setq org-agenda-files '("~/Sync/org/todos.org"))
@@ -215,16 +234,16 @@
   :ensure t
   :hook ((org-mode . org-modern-mode)
          (org-agenda-finalize . org-modern-agenda)
-	 (org-mode . (lambda () (display-line-numbers-mode 0))))
+	     (org-mode . (lambda () (display-line-numbers-mode 0))))
 
   :config
   ;; Customize org-modern settings
   (setq org-modern-star '("•" "◦" "▸")    ;; Customize bullet points
         org-modern-label-border 0.2)       ;; Add padding to labels
-	;org-modern-table nil              ;; Disable table enhancement if you prefer plain tables
-        ; org-modern-todo nil               ;; Keep the default TODO styles
-        ;org-modern-progress nil           ;; Disable progress bars if not needed
-        ;org-modern-priority nil)          ;; Disable priority enhancement
+                                        ;org-modern-table nil              ;; Disable table enhancement if you prefer plain tables
+                                        ; org-modern-todo nil               ;; Keep the default TODO styles
+                                        ;org-modern-progress nil           ;; Disable progress bars if not needed
+                                        ;org-modern-priority nil)          ;; Disable priority enhancement
   ;; Adjust line spacing for better readability
   (setq line-spacing 0.2))
 
