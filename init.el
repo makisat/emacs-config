@@ -40,6 +40,7 @@
 (require 'package)
 
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+			 ("melpa-stable" . "https://stable.melpa.org/packages/")
 			 ("org" . "https://orgmode.org/elpa/")
 			 ("elpa" . "https://elpa.gnu.org/packages/")))
 
@@ -140,6 +141,12 @@
   (define-key evil-normal-state-map (kbd "C-u") 'my-scroll-half-page-up-and-recenter)
   (evil-mode 1))  ; Enable evil-mode globally
 
+(use-package evil-collection
+  :after evil
+  :ensure t
+  :config
+  (evil-collection-init))
+
 (use-package helpful
   :ensure t
   :custom
@@ -177,10 +184,11 @@
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
-
 ;; Org-mode basic setup
 (use-package org
   :ensure t
+  :hook ((org-agenda-mode . olivetti-mode)
+	 (org-agenda-mode . (lambda () (display-line-numbers-mode 0))))
   :config
   ;; org agenda file
   (setq org-agenda-files '("~/Sync/org/todos.org"))
@@ -206,7 +214,9 @@
 (use-package org-modern
   :ensure t
   :hook ((org-mode . org-modern-mode)
-         (org-agenda-finalize . org-modern-agenda))
+         (org-agenda-finalize . org-modern-agenda)
+	 (org-mode . (lambda () (display-line-numbers-mode 0))))
+
   :config
   ;; Customize org-modern settings
   (setq org-modern-star '("•" "◦" "▸")    ;; Customize bullet points
@@ -218,6 +228,11 @@
   ;; Adjust line spacing for better readability
   (setq line-spacing 0.2))
 
+(use-package olivetti
+  :hook (org-mode . olivetti-mode)
+  :config
+  (setq olivetti-body-width 100))
+
 ;; Custom set variables
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -228,7 +243,7 @@
    '("456697e914823ee45365b843c89fbc79191fdbaff471b29aad9dcbe0ee1d5641" "014cb63097fc7dbda3edf53eb09802237961cbb4c9e9abd705f23b86511b0a69" "48042425e84cd92184837e01d0b4fe9f912d875c43021c3bcb7eeb51f1be5710" "4594d6b9753691142f02e67b8eb0fda7d12f6cc9f1299a49b819312d6addad1d" default))
  '(delete-selection-mode nil)
  '(package-selected-packages
-   '(org-modern doom-themes helpful ivy-rich which-key rainbow-delimiters doom-modeline evil counsel ivy)))
+   '(org-agenda olivetti evil-collection org-modern doom-themes helpful ivy-rich which-key rainbow-delimiters doom-modeline evil counsel ivy)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
