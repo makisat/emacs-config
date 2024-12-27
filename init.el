@@ -2,8 +2,15 @@
 ;; Initial setups ;;
 ;; -------------- ;;
 
+;; Move custom set variables
+(setq custom-file "~/.config/emacs/custom.el")
+(load custom-file 'no-error 'no-message)
+
 ;; No start up message
 (setq inhibit-startup-message t)
+
+;; Backup files in one place
+(setq backup-directory-alist '((".*" . "~/.config/emacs/backup-files")))
 
 ;; Remove some visuals
 (menu-bar-mode -1)
@@ -14,9 +21,6 @@
 
 ;; Transparent background
 (set-frame-parameter nil 'alpha-background 80)
-
-;; ESC for quit
-(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
 ;; Line numbers
 (global-display-line-numbers-mode t)
@@ -57,7 +61,8 @@
 ;; Mini Buffer ;;
 
 (use-package ivy
-  :bind (:map ivy-minibuffer-map
+  :bind (("C-s" . swiper)
+	 :map ivy-minibuffer-map
           ("TAB" . ivy-alt-done))
   :config
   (ivy-mode 1))
@@ -75,6 +80,15 @@
   (setq ivy-initial-inputs-alist nil))
 
 (use-package smex) ; enable history for counsel-M-x
+
+(use-package projectile
+  :config (projectile-mode 1)
+  :custom (projectile-completion-system 'ivy))
+
+(use-package counsel-projectile
+  :config (counsel-projectile-mode))
+
+(use-package magit)
 
 ;; UI ;;
 
@@ -142,15 +156,20 @@
   (general-create-definer max/leader-def
     :keymaps '(normal insert visual emacs)
     :prefix "SPC"
-    :global-prefix "C-SPC")
-
+    :global-prefix "M-SPC")
+  
   (max/leader-def
     "."  '(counsel-find-file :which-key "find file")
     "f"  '(:ignore t :which-key "files")
+    "ff" '(counsel-find-file :which-key "find file")
     "fs" '(save-buffer :which-key "save file")
     "b"  '(:ignore t :which-key "buffers")
     "bb" '(counsel-switch-buffer :which-key "switch buffer")
-    "bk" '(kill-buffer :which-key "kill buffer")))
+    "bk" '(kill-buffer :which-key "kill buffer")
+    "bp" '(previous-buffer :which-key "preivous buffer")
+    "bn" '(next-buffer :which-key "next buffer")
+    "p"  'projectile-command-map
+    "w"  'evil-window-map))
 
 ;; Visuals ;;
 
@@ -168,23 +187,3 @@
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
-
-;; -------------------- ;;
-;; Custom Set Variables ;;
-;; -------------------- ;;
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("aec7b55f2a13307a55517fdf08438863d694550565dee23181d2ebd973ebd6b8" default))
- '(delete-selection-mode nil)
- '(package-selected-packages '(evil-commentary general evil-collection ivy)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
