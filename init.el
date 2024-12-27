@@ -28,6 +28,7 @@
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 (setq display-line-numbers-width-start t) ;; Stop the screen shifting
+(setq scroll-conservatively 10000)
 (setq scroll-margin 8)
 
 ;; Change the font
@@ -75,6 +76,8 @@
 
 (use-package smex) ; enable history for counsel-M-x
 
+;; UI ;;
+
 (use-package which-key
   :init (which-key-mode)
   :config
@@ -89,6 +92,65 @@
   ([remap describe-command] . helpful-command)
   ([remap describe-variable] . counsel-describe-variable)
   ([remap describe-key] . helpful-key))
+
+;; Keybinds ;;
+
+;; Change the scrolling behavior
+(defun max/half-down ()
+  "Scroll half page down and recenter cursor."
+  (interactive)
+  (evil-scroll-down (/ (window-body-height) 2))
+  (recenter))
+
+(defun max/half-up ()
+  "Scroll half page up and recenter cursor."
+  (interactive)
+  (evil-scroll-up (/ (window-body-height) 2))
+  (recenter))
+
+(use-package evil
+  :init
+  (setq evil-want-integration t)
+  (setq evil-want-keybinding nil)
+  (setq evil-want-C-u-scroll t)
+  (setq evil-want-C-i-jump nil)
+  (setq evil-undo-system 'undo-redo)
+  (setq evil-split-window-below t)
+  (setq evil-vsplit-window-right t)
+  :config
+  (evil-mode 1)
+  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+
+  (evil-global-set-key 'normal (kbd "C-d") 'max/half-down)
+  (evil-global-set-key 'normal (kbd "C-u") 'max/half-up))
+
+(use-package evil-collection
+  :after evil
+  :config
+  (evil-collection-init))
+
+(use-package evil-commentary
+  :config
+  (evil-commentary-mode 1))
+
+(use-package general
+  :config
+  (general-evil-setup)
+
+  ;; SPC leader key
+  (general-create-definer max/leader-def
+    :keymaps '(normal insert visual emacs)
+    :prefix "SPC"
+    :global-prefix "C-SPC")
+
+  (max/leader-def
+    "."  '(counsel-find-file :which-key "find file")
+    "f"  '(:ignore t :which-key "files")
+    "fs" '(save-buffer :which-key "save file")
+    "b"  '(:ignore t :which-key "buffers")
+    "bb" '(counsel-switch-buffer :which-key "switch buffer")
+    "bk" '(kill-buffer :which-key "kill buffer")))
 
 ;; Visuals ;;
 
@@ -119,7 +181,7 @@
  '(custom-safe-themes
    '("aec7b55f2a13307a55517fdf08438863d694550565dee23181d2ebd973ebd6b8" default))
  '(delete-selection-mode nil)
- '(package-selected-packages '(ivy)))
+ '(package-selected-packages '(evil-commentary general evil-collection ivy)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
