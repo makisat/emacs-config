@@ -22,6 +22,9 @@
 ;; Transparent background
 (set-frame-parameter nil 'alpha-background 80)
 
+;; ESC to quit
+(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+
 ;; Line numbers
 (global-display-line-numbers-mode t)
 (setq display-line-numbers-type 'relative)
@@ -169,6 +172,9 @@
     "bp" '(previous-buffer :which-key "preivous buffer")
     "bn" '(next-buffer :which-key "next buffer")
     "p"  'projectile-command-map
+    "g"  '(:ignore t :which-key "magit")
+    "gg" '(magit :which-key "magit status")
+    "gd" '(magit-diff :which-key "magit diff")
     "w"  'evil-window-map))
 
 ;; Visuals ;;
