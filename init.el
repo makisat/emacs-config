@@ -22,9 +22,6 @@
 ;; Transparent background
 (set-frame-parameter nil 'alpha-background 80)
 
-;; ESC to quit
-(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-
 ;; Line numbers
 (global-display-line-numbers-mode t)
 (setq display-line-numbers-type 'relative)
@@ -89,7 +86,9 @@
   :custom (projectile-completion-system 'ivy))
 
 (use-package counsel-projectile
-  :config (counsel-projectile-mode))
+  :config
+  (counsel-projectile-mode)
+  (setq projectile-enable-caching t))
 
 (use-package magit)
 
@@ -112,70 +111,26 @@
 
 ;; Keybinds ;;
 
-;; Change the scrolling behavior
-(defun max/half-down ()
-  "Scroll half page down and recenter cursor."
-  (interactive)
-  (evil-scroll-down (/ (window-body-height) 2))
-  (recenter))
+(use-package general)
+;; SPC leader key
+(global-unset-key (kbd "M-SPC"))
+(general-create-definer max/leader-def
+  :prefix "M-SPC")
 
-(defun max/half-up ()
-  "Scroll half page up and recenter cursor."
-  (interactive)
-  (evil-scroll-up (/ (window-body-height) 2))
-  (recenter))
-
-(use-package evil
-  :init
-  (setq evil-want-integration t)
-  (setq evil-want-keybinding nil)
-  (setq evil-want-C-u-scroll t)
-  (setq evil-want-C-i-jump nil)
-  (setq evil-undo-system 'undo-redo)
-  (setq evil-split-window-below t)
-  (setq evil-vsplit-window-right t)
-  :config
-  (evil-mode 1)
-  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
-  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
-
-  (evil-global-set-key 'normal (kbd "C-d") 'max/half-down)
-  (evil-global-set-key 'normal (kbd "C-u") 'max/half-up))
-
-(use-package evil-collection
-  :after evil
-  :config
-  (evil-collection-init))
-
-(use-package evil-commentary
-  :config
-  (evil-commentary-mode 1))
-
-(use-package general
-  :config
-  (general-evil-setup)
-
-  ;; SPC leader key
-  (general-create-definer max/leader-def
-    :keymaps '(normal insert visual emacs)
-    :prefix "SPC"
-    :global-prefix "M-SPC")
-  
-  (max/leader-def
-    "."  '(counsel-find-file :which-key "find file")
-    "f"  '(:ignore t :which-key "files")
-    "ff" '(counsel-find-file :which-key "find file")
-    "fs" '(save-buffer :which-key "save file")
-    "b"  '(:ignore t :which-key "buffers")
-    "bb" '(counsel-switch-buffer :which-key "switch buffer")
-    "bk" '(kill-buffer :which-key "kill buffer")
-    "bp" '(previous-buffer :which-key "preivous buffer")
-    "bn" '(next-buffer :which-key "next buffer")
-    "p"  'projectile-command-map
-    "g"  '(:ignore t :which-key "magit")
-    "gg" '(magit :which-key "magit status")
-    "gd" '(magit-diff :which-key "magit diff")
-    "w"  'evil-window-map))
+(max/leader-def
+ "."  '(counsel-find-file :which-key "find file")
+ "f"  '(:ignore t :which-key "files")
+ "ff" '(counsel-find-file :which-key "find file")
+ "fs" '(save-buffer :which-key "save file")
+ "b"  '(:ignore t :which-key "buffers")
+ "bb" '(counsel-switch-buffer :which-key "switch buffer")
+ "bk" '(kill-buffer :which-key "kill buffer")
+ "bp" '(previous-buffer :which-key "preivous buffer")
+ "bn" '(next-buffer :which-key "next buffer")
+ "p"  'projectile-command-map
+ "g"  '(:ignore t :which-key "magit")
+ "gg" '(magit :which-key "magit status")
+ "gd" '(magit-diff :which-key "magit diff"))
 
 ;; Visuals ;;
 
