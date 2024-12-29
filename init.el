@@ -1,13 +1,6 @@
-;; -------------- ;;
-;; Initial setups ;;
-;; -------------- ;;
-
 ;; Move custom set variables
 (setq custom-file "~/.config/emacs/custom.el")
 (load custom-file 'no-error 'no-message)
-
-;; No start up message
-(setq inhibit-startup-message t)
 
 ;; Set backup and auto-save files directory
 (setq backup-directory-alist
@@ -16,7 +9,11 @@
 
 (setq auto-save-file-name-transforms
       `((".*" "~/.config/emacs/auto-save-files/" t)))
+
 (make-directory "~/.config/emacs/auto-save-files/" t)
+
+;; No start up message
+(setq inhibit-startup-message t)
 
 ;; Remove some visuals
 (menu-bar-mode -1)
@@ -33,21 +30,23 @@
 (setq display-line-numbers-type 'relative)
 
 (dolist (mode '(org-mode-hook
+                org-agenda-mode-hook
                 term-mode-hook
                 eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 (setq display-line-numbers-width-start t) ;; Stop the screen shifting
+
 (setq scroll-conservatively 10000)
 (setq scroll-margin 8)
 
-;; Change the font
-;; (set-face-attribute 'default nil :font "Iosevka" :height 140)
-(set-face-attribute 'default nil :font "JetBrainsMono Nerd Font" :height 140)
+;; Set tabs
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
+(setq-default tab-always-indent nil)
 
-;; ----------------- ;;
-;; Setup use-package ;;
-;; ----------------- ;;
+;; Change the font
+(set-face-attribute 'default nil :font "JetBrainsMono Nerd Font" :height 140)
 
 (require 'package)
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
@@ -61,15 +60,9 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
-;; ---------------- ;;
-;; Install packages ;;
-;; ---------------- ;;
-
-;; Mini Buffer ;;
-
 (use-package ivy
   :bind (("C-s" . swiper)
-	     :map ivy-minibuffer-map
+         :map ivy-minibuffer-map
          ("TAB" . ivy-alt-done))
   :config
   (ivy-mode 1))
@@ -97,10 +90,6 @@
   (counsel-projectile-mode)
   (setq projectile-enable-caching t))
 
-(use-package magit)
-
-;; UI ;;
-
 (use-package which-key
   :init (which-key-mode)
   :config
@@ -116,35 +105,75 @@
   ([remap describe-variable] . counsel-describe-variable)
   ([remap describe-key] . helpful-key))
 
-;; Keybinds ;;
+(use-package magit)
 
-(use-package general)
-;; SPC leader key
-(global-unset-key (kbd "M-SPC"))
-(general-create-definer max/leader-def
-  :prefix "M-SPC")
+(use-package doom-themes
+  :config
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t)
 
-(max/leader-def
- "."  '(counsel-find-file :which-key "find file")
- "f"  '(:ignore t :which-key "files")
- "ff" '(counsel-find-file :which-key "find file")
- "fs" '(save-buffer :which-key "save file")
- "b"  '(:ignore t :which-key "buffers")
- "bb" '(counsel-switch-buffer :which-key "switch buffer")
- "bk" '(kill-buffer :which-key "kill buffer")
- "bp" '(previous-buffer :which-key "preivous buffer")
- "bn" '(next-buffer :which-key "next buffer")
- "p"  'projectile-command-map
- "g"  '(:ignore t :which-key "magit")
- "gg" '(magit :which-key "magit status")
- "gd" '(magit-diff :which-key "magit diff")
- "m"  'bookmark-map)
+  (load-theme 'doom-tomorrow-night t)
 
-;; Set tabs
-(setq-default indent-tabs-mode nil)
-(setq-default tab-width 4)
-(setq-default tab-always-indent nil)
+  (doom-themes-org-config))
 
+(use-package doom-modeline
+  :init (doom-modeline-mode 1))
+
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+
+(use-package org
+  :hook
+  (org-mode . visual-line-mode)
+  (org-mode . org-indent-mode)
+  (org-mode . yas-minor-mode))
+
+(use-package org-bullets
+  :after org
+  :hook (org-mode . org-bullets-mode)
+  :custom
+  (org-bullets-bullet-list '("◉" "○" "◆" "◉" "○" "◆")))
+
+(custom-set-faces
+ '(org-todo ((t (:background "light green" :foreground "black" :weight bold))))
+ '(org-done ((t (:background "gray30" :foreground "white" :weight bold)))))
+
+;; Org babel
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)
+   (python . t)))
+
+(setq org-confirm-babel-evaluate nil)
+
+(use-package olivetti
+  :after org
+  :hook ((org-mode org-agenda-mode) . olivetti-mode))
+
+(use-package general
+  :config
+  ;; SPC leader key
+  (global-unset-key (kbd "M-SPC"))
+  (general-create-definer max/leader-def
+    :prefix "M-SPC")
+
+  (max/leader-def
+    "."  '(counsel-find-file :which-key "find file")
+    "f"  '(:ignore t :which-key "files")
+    "ff" '(counsel-find-file :which-key "find file")
+    "fs" '(save-buffer :which-key "save file")
+    "b"  '(:ignore t :which-key "buffers")
+    "bb" '(counsel-switch-buffer :which-key "switch buffer")
+    "bk" '(kill-buffer :which-key "kill buffer")
+    "bp" '(previous-buffer :which-key "preivous buffer")
+    "bn" '(next-buffer :which-key "next buffer")
+    "p"  'projectile-command-map
+    "g"  '(:ignore t :which-key "magit")
+    "gg" '(magit :which-key "magit status")
+    "gd" '(magit-diff :which-key "magit diff")
+    "m"  'bookmark-map))
+
+;; Custom backspace
 (defun max/backspace-whitespace-to-tab-stop ()
   "Delete whitespace backwards to the next tab-stop, otherwise delete one character."
   (interactive)
@@ -172,7 +201,6 @@
  :keymaps 'prog-mode-map
  "<backspace>" 'max/backspace-whitespace-to-tab-stop)
 
-;; LSP ;;
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
   :config
@@ -201,6 +229,8 @@
               ("C-<tab>" . yas-expand))
   :config (yas-reload-all))
 
+(add-hook 'emacs-lisp-mode-hook 'company-mode)
+
 (defun max/go-mode-hook ()
   "My go mode hook"
   (interactive)
@@ -216,38 +246,3 @@
   :hook
   (go-mode . lsp-deferred)
   (go-mode . max/go-mode-hook))
-
-;; Visuals ;;
-
-(use-package doom-themes
-  :config
-  (setq doom-themes-enable-bold t
-        doom-themes-enable-italic t)
-
-  (load-theme 'doom-tomorrow-night t)
-
-  (doom-themes-org-config))
-
-(use-package doom-modeline
-  :init (doom-modeline-mode 1))
-
-(use-package rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode))
-
-;; Org mode ;;
-
-(use-package org
-  :hook
-  (org-mode . visual-line-mode)
-  (org-mode . org-indent-mode))
-
-(use-package org-bullets
-  :after org
-  :hook (org-mode . org-bullets-mode)
-  :custom
-  (org-bullets-bullet-list '("◉" "○" "◆" "◉" "○" "◆")))
-
-(use-package olivetti
-  :after org
-  :hook (org-mode . olivetti-mode))
-
