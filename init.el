@@ -9,8 +9,14 @@
 ;; No start up message
 (setq inhibit-startup-message t)
 
-;; Backup files in one place
-(setq backup-directory-alist '((".*" . "~/.config/emacs/backup-files")))
+;; Set backup and auto-save files directory
+(setq backup-directory-alist
+      '(("." . "~/.config/emacs/backup-files")))
+(make-directory "~/.config/emacs/backup-files/" t)
+
+(setq auto-save-file-name-transforms
+      `((".*" "~/.config/emacs/auto-save-files/" t)))
+(make-directory "~/.config/emacs/auto-save-files/" t)
 
 ;; Remove some visuals
 (menu-bar-mode -1)
@@ -27,8 +33,8 @@
 (setq display-line-numbers-type 'relative)
 
 (dolist (mode '(org-mode-hook
-                 term-mode-hook
-                 eshell-mode-hook))
+                term-mode-hook
+                eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 (setq display-line-numbers-width-start t) ;; Stop the screen shifting
@@ -36,6 +42,7 @@
 (setq scroll-margin 8)
 
 ;; Change the font
+;; (set-face-attribute 'default nil :font "Iosevka" :height 140)
 (set-face-attribute 'default nil :font "JetBrainsMono Nerd Font" :height 140)
 
 ;; ----------------- ;;
@@ -62,8 +69,8 @@
 
 (use-package ivy
   :bind (("C-s" . swiper)
-	 :map ivy-minibuffer-map
-          ("TAB" . ivy-alt-done))
+	     :map ivy-minibuffer-map
+         ("TAB" . ivy-alt-done))
   :config
   (ivy-mode 1))
 
@@ -132,6 +139,54 @@
  "gg" '(magit :which-key "magit status")
  "gd" '(magit-diff :which-key "magit diff"))
 
+;; Set tabs
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
+(setq-default tab-always-indent nil)
+
+(defun max/backspace-whitespace-to-tab-stop ()
+  "Delete whitespace backwards to the next tab-stop, otherwise delete one character."
+  (interactive)
+  (if (or indent-tabs-mode (use-region-p)
+          (> (point)
+             (save-excursion
+               (back-to-indentation)
+               (point))))
+      (call-interactively 'backward-delete-char)
+    (let ((step (% (current-column) tab-width))
+          (pt (point)))
+      (when (zerop step)
+        (setq step tab-width))
+      ;; Account for edge case near beginning of buffer.
+      (setq step (min (- pt 1) step))
+      (save-match-data
+        (if (string-match "[^\t ]*\\([\t ]+\\)$"
+                          (buffer-substring-no-properties
+                           (- pt step) pt))
+            (backward-delete-char (- (match-end 1)
+                                     (match-beginning 1)))
+          (call-interactively 'backward-delete-char))))))
+
+(general-define-key
+ "<backspace>" 'max/backspace-whitespace-to-tab-stop)
+
+;; LSP ;;
+(use-package lsp-mode
+  :commands (lsp lsp-deferred)
+  :init
+  (setq lsp-keymap-prefix "C-c l")
+  :config
+  (lsp-enable-which-key-integration t))
+
+(defun max/go-mode-hook ()
+  (interactive)
+  (setq indent-tabs-mode nil
+        tab-width 4))
+
+(use-package go-mode
+  :mode "\\.go\\'"
+  :hook (go-mode . max/go-mode-hook))
+
 ;; Visuals ;;
 
 (use-package doom-themes
@@ -148,3 +203,21 @@
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
+
+;; Org mode ;;
+
+(use-package org
+  :hook
+  (org-mode . visual-line-mode)
+  (org-mode . org-indent-mode))
+
+(use-package org-bullets
+  :after org
+  :hook (org-mode . org-bullets-mode)
+  :custom
+  (org-bullets-bullet-list '("◉" "○" "◆" "◉" "○" "◆")))
+
+(use-package olivetti
+  :after org
+  :hook (org-mode . olivetti-mode))
+
