@@ -168,24 +168,33 @@
           (call-interactively 'backward-delete-char))))))
 
 (general-define-key
+ :keymaps 'prog-mode-map
  "<backspace>" 'max/backspace-whitespace-to-tab-stop)
 
 ;; LSP ;;
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
-  :init
-  (setq lsp-keymap-prefix "C-c l")
   :config
-  (lsp-enable-which-key-integration t))
+  (lsp-enable-which-key-integration t)
+  (general-define-key
+   :prefix "M-SPC"
+   "l" lsp-command-map))
 
 (defun max/go-mode-hook ()
+  "My go mode hook"
   (interactive)
-  (setq indent-tabs-mode nil
-        tab-width 4))
+  (setq indent-tabs-mode nil)
+  (setq tab-width 4)
+  (setq tab-always-indent nil)
+
+  (whitespace-mode 1)
+  (setq whitespace-newline 'newline-mark))  
 
 (use-package go-mode
   :mode "\\.go\\'"
-  :hook (go-mode . max/go-mode-hook))
+  :hook
+  (go-mode . lsp-deferred)
+  (go-mode . max/go-mode-hook))
 
 ;; Visuals ;;
 
