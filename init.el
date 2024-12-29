@@ -107,49 +107,6 @@
 
 (use-package magit)
 
-(use-package doom-themes
-  :config
-  (setq doom-themes-enable-bold t
-        doom-themes-enable-italic t)
-
-  (load-theme 'doom-tomorrow-night t)
-
-  (doom-themes-org-config))
-
-(use-package doom-modeline
-  :init (doom-modeline-mode 1))
-
-(use-package rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode))
-
-(use-package org
-  :hook
-  (org-mode . visual-line-mode)
-  (org-mode . org-indent-mode)
-  (org-mode . yas-minor-mode))
-
-(use-package org-bullets
-  :after org
-  :hook (org-mode . org-bullets-mode)
-  :custom
-  (org-bullets-bullet-list '("◉" "○" "◆" "◉" "○" "◆")))
-
-(custom-set-faces
- '(org-todo ((t (:background "light green" :foreground "black" :weight bold))))
- '(org-done ((t (:background "gray30" :foreground "white" :weight bold)))))
-
-;; Org babel
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((emacs-lisp . t)
-   (python . t)))
-
-(setq org-confirm-babel-evaluate nil)
-
-(use-package olivetti
-  :after org
-  :hook ((org-mode org-agenda-mode) . olivetti-mode))
-
 (use-package general
   :config
   ;; SPC leader key
@@ -200,6 +157,49 @@
 (general-define-key
  :keymaps 'prog-mode-map
  "<backspace>" 'max/backspace-whitespace-to-tab-stop)
+
+(use-package doom-themes
+  :config
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t)
+
+  (load-theme 'doom-tomorrow-night t)
+
+  (doom-themes-org-config))
+
+(use-package doom-modeline
+  :init (doom-modeline-mode 1))
+
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+
+(use-package org
+  :hook
+  (org-mode . visual-line-mode)
+  (org-mode . org-indent-mode)
+  (org-mode . yas-minor-mode))
+
+(use-package org-bullets
+  :after org
+  :hook (org-mode . org-bullets-mode)
+  :custom
+  (org-bullets-bullet-list '("◉" "○" "◆" "◉" "○" "◆")))
+
+(custom-set-faces
+ '(org-todo ((t (:background "light green" :foreground "black" :weight bold))))
+ '(org-done ((t (:background "gray30" :foreground "white" :weight bold)))))
+
+;; Org babel
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)
+   (python . t)))
+
+(setq org-confirm-babel-evaluate nil)
+
+(use-package olivetti
+  :after org
+  :hook ((org-mode org-agenda-mode) . olivetti-mode))
 
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
