@@ -194,7 +194,12 @@
   :custom
   (company-minimum-prefix-length 1)
   (company-idle-delay 0.0))
-  
+
+(use-package yasnippet
+  :hook (lsp-mode . yas-minor-mode)
+  :bind (:map yas-minor-mode-map
+              ("C-<tab>" . yas-expand))
+  :config (yas-reload-all))
 
 (defun max/go-mode-hook ()
   "My go mode hook"
