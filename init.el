@@ -137,7 +137,8 @@
  "p"  'projectile-command-map
  "g"  '(:ignore t :which-key "magit")
  "gg" '(magit :which-key "magit status")
- "gd" '(magit-diff :which-key "magit diff"))
+ "gd" '(magit-diff :which-key "magit diff")
+ "m"  'bookmark-map)
 
 ;; Set tabs
 (setq-default indent-tabs-mode nil)
@@ -178,7 +179,22 @@
   (lsp-enable-which-key-integration t)
   (general-define-key
    :prefix "M-SPC"
-   "l" lsp-command-map))
+   "l"  lsp-command-map
+   "lk" 'lsp-ui-doc-show))
+
+(use-package lsp-ui
+  :custom (lsp-ui-doc-position 'at-point))
+
+(use-package company
+  :after lsp-mode
+  :hook (lsp-mode . company-mode)
+  :bind
+  (:map company-active-map
+        ("<tab>" . company-complete-selection))
+  :custom
+  (company-minimum-prefix-length 1)
+  (company-idle-delay 0.0))
+  
 
 (defun max/go-mode-hook ()
   "My go mode hook"
