@@ -23,7 +23,8 @@
 (set-fringe-mode 10)
 
 ;; Transparent background
-(set-frame-parameter nil 'alpha-background 80)
+
+(add-to-list 'default-frame-alist '(alpha-background . 80))
 
 ;; Line numbers
 (global-display-line-numbers-mode t)
@@ -32,7 +33,8 @@
 (dolist (mode '(org-mode-hook
                 org-agenda-mode-hook
                 term-mode-hook
-                eshell-mode-hook))
+                eshell-mode-hook
+                vterm-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 (setq display-line-numbers-width-start t) ;; Stop the screen shifting
@@ -104,6 +106,9 @@
   ([remap describe-command] . helpful-command)
   ([remap describe-variable] . counsel-describe-variable)
   ([remap describe-key] . helpful-key))
+
+(use-package vterm
+  :custom (vterm-shell "/bin/fish"))
 
 (use-package magit)
 

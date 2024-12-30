@@ -24,41 +24,43 @@
 ** Line numbers and visuals
 #+begin_src emacs-lisp
 
-  ;; No start up message
-  (setq inhibit-startup-message t)
+    ;; No start up message
+    (setq inhibit-startup-message t)
 
-  ;; Remove some visuals
-  (menu-bar-mode -1)
-  (scroll-bar-mode -1)
-  (tool-bar-mode -1)
-  (tooltip-mode -1)
-  (set-fringe-mode 10)
+    ;; Remove some visuals
+    (menu-bar-mode -1)
+    (scroll-bar-mode -1)
+    (tool-bar-mode -1)
+    (tooltip-mode -1)
+    (set-fringe-mode 10)
 
-  ;; Transparent background
-  (set-frame-parameter nil 'alpha-background 80)
+    ;; Transparent background
 
-  ;; Line numbers
-  (global-display-line-numbers-mode t)
-  (setq display-line-numbers-type 'relative)
+    (add-to-list 'default-frame-alist '(alpha-background . 80))
 
-  (dolist (mode '(org-mode-hook
-                  org-agenda-mode-hook
-                  term-mode-hook
-                  eshell-mode-hook))
-    (add-hook mode (lambda () (display-line-numbers-mode 0))))
+    ;; Line numbers
+    (global-display-line-numbers-mode t)
+    (setq display-line-numbers-type 'relative)
 
-  (setq display-line-numbers-width-start t) ;; Stop the screen shifting
+    (dolist (mode '(org-mode-hook
+                    org-agenda-mode-hook
+                    term-mode-hook
+                    eshell-mode-hook
+                    vterm-mode-hook))
+      (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
-  (setq scroll-conservatively 10000)
-  (setq scroll-margin 8)
+    (setq display-line-numbers-width-start t) ;; Stop the screen shifting
 
-  ;; Set tabs
-  (setq-default indent-tabs-mode nil)
-  (setq-default tab-width 4)
-  (setq-default tab-always-indent nil)
+    (setq scroll-conservatively 10000)
+    (setq scroll-margin 8)
 
-  ;; Change the font
-  (set-face-attribute 'default nil :font "JetBrainsMono Nerd Font" :height 140)
+    ;; Set tabs
+    (setq-default indent-tabs-mode nil)
+    (setq-default tab-width 4)
+    (setq-default tab-always-indent nil)
+
+    ;; Change the font
+    (set-face-attribute 'default nil :font "JetBrainsMono Nerd Font" :height 140)
 
 #+end_src
 * Packages
@@ -133,6 +135,13 @@
     ([remap describe-command] . helpful-command)
     ([remap describe-variable] . counsel-describe-variable)
     ([remap describe-key] . helpful-key))
+
+#+end_src
+** Vterm
+#+begin_src emacs-lisp
+
+  (use-package vterm
+    :custom (vterm-shell "/bin/fish"))
 
 #+end_src
 ** Magit
