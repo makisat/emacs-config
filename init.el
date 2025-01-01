@@ -285,12 +285,27 @@
   (whitespace-mode 1)
   (setq whitespace-newline 'newline-mark))
 
-;; (use-package go-mode
-;;   :mode "\\.go\\'"
-;;   :hook (lsp-deferred max/go-mode-hook))
-
 (add-hook 'go-ts-mode-hook (lambda () (lsp-deferred)))
 (add-hook 'go-ts-mode-hook (lambda () (max/go-mode-hook)))
+
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
+
+(add-hook 'typescript-ts-mode-hook
+          (lambda ()
+            (message "it's ts mode")
+            (lsp-deferred)
+            (setq indent-tabs-mode nil)
+            (setq tab-width 2)
+            (setq tab-always-indent nil)
+            (setq typescript-ts-mode-indent-offset 2)
+            (whitespace-mode 1)
+            (setq whitespace-newline 'newline-mark)))
+
+(setq treesit-language-source-alist
+      '((typescript "https://github.com/tree-sitter/tree-sitter-typescript"
+                    "master" "typescript/src")
+        (tsx        "https://github.com/tree-sitter/tree-sitter-typescript"
+                    "master" "tsx/src")))
 
 (setq major-mode-remap-alist
       '((python-mode        . python-ts-mode)
