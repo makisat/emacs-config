@@ -23,7 +23,6 @@
 (set-fringe-mode 10)
 
 ;; Transparent background
-
 (add-to-list 'default-frame-alist '(alpha-background . 80))
 
 ;; Line numbers
@@ -63,8 +62,7 @@
 (setq use-package-always-ensure t)
 
 (use-package ivy
-  :bind (("C-s" . swiper)
-         :map ivy-minibuffer-map
+  :bind (:map ivy-minibuffer-map
          ("TAB" . ivy-alt-done))
   :config
   (ivy-mode 1))
@@ -119,6 +117,18 @@
   (general-create-definer max/leader-def
     :prefix "M-SPC")
 
+  (defun max/split-right ()
+    "vertical split then move the cursor to the right"
+    (interactive)
+    (split-window-right)
+    (windmove-right))
+
+  (defun max/split-below ()
+    "vertical split then move the cursor to the right"
+    (interactive)
+    (split-window-below)
+    (windmove-down))
+
   (max/leader-def
     "."  '(counsel-find-file :which-key "find file")
     "f"  '(:ignore t :which-key "files")
@@ -129,6 +139,18 @@
     "bk" '(kill-buffer :which-key "kill buffer")
     "bp" '(previous-buffer :which-key "preivous buffer")
     "bn" '(next-buffer :which-key "next buffer")
+    "w"  '(:ignore t :which-key "window management")
+    "wl" '(windmove-right :which-key "focus right")
+    "wh" '(windmove-left :which-key "focus left")
+    "wk" '(windmove-up :which-key "focus up")
+    "wj" '(windmove-down :which-key "focus down")
+    "wv" '(max/split-right :which-key "split right")
+    "ws" '(max/split-below :which-key "split below")
+    "wc" '(delete-window :which-key "close window")
+    "n"  '(:ignore t :which-key "org-roam")
+    "nn" '(org-roam-node-find :which-key "open/create node")
+    "ni" '(org-roam-node-insert :which-key "insert node")
+    "nl" '(org-roam-buffer-toggle :which-key "back links")
     "p"  'projectile-command-map
     "g"  '(:ignore t :which-key "magit")
     "gg" '(magit :which-key "magit status")
@@ -162,6 +184,19 @@
 (general-define-key
  :keymaps 'prog-mode-map
  "<backspace>" 'max/backspace-whitespace-to-tab-stop)
+
+(use-package smartparens
+  :hook (prog-mode text-mode org-mode)
+  :config
+  (require 'smartparens-config))
+
+(use-package org-roam
+  :init
+  (setq org-roam-v2-ack t)
+  :custom
+  (org-roam-directory  "~/Nextcloud/RoamNotes")
+  :config
+  (org-roam-setup))
 
 (use-package doom-themes
   :config
@@ -206,6 +241,9 @@
   :after org
   :hook ((org-mode org-agenda-mode) . olivetti-mode))
 
+(use-package mozc
+  :config (setq default-input-method "japanese-mozc"))
+
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
   :config
@@ -242,12 +280,24 @@
   (setq indent-tabs-mode nil)
   (setq tab-width 4)
   (setq tab-always-indent nil)
+  (setq go-ts-mode-indent-offset 4)
 
   (whitespace-mode 1)
-  (setq whitespace-newline 'newline-mark))  
+  (setq whitespace-newline 'newline-mark))
 
-(use-package go-mode
-  :mode "\\.go\\'"
-  :hook
-  (go-mode . lsp-deferred)
-  (go-mode . max/go-mode-hook))
+;; (use-package go-mode
+;;   :mode "\\.go\\'"
+;;   :hook (lsp-deferred max/go-mode-hook))
+
+(add-hook 'go-ts-mode-hook (lambda () (lsp-deferred)))
+(add-hook 'go-ts-mode-hook (lambda () (max/go-mode-hook)))
+
+(setq major-mode-remap-alist
+      '((python-mode        . python-ts-mode)
+        (js-mode            . js-ts-mode)
+        (go-mode            . go-ts-mode)
+        (typescript-mode    . typescript-ts-mode)
+        (json-mode          . json-ts-mode)
+        (yaml-mode          . yaml-ts-mode)
+        (html-mode          . html-ts-mode)
+        (css-mode           . css-ts-mode)))

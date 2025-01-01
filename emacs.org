@@ -35,7 +35,6 @@
     (set-fringe-mode 10)
 
     ;; Transparent background
-
     (add-to-list 'default-frame-alist '(alpha-background . 80))
 
     ;; Line numbers
@@ -84,8 +83,7 @@
 #+begin_src emacs-lisp
 
   (use-package ivy
-    :bind (("C-s" . swiper)
-           :map ivy-minibuffer-map
+    :bind (:map ivy-minibuffer-map
            ("TAB" . ivy-alt-done))
     :config
     (ivy-mode 1))
@@ -153,56 +151,101 @@
 ** General
 #+begin_src emacs-lisp
 
-  (use-package general
+    (use-package general
+      :config
+      ;; SPC leader key
+      (global-unset-key (kbd "M-SPC"))
+      (general-create-definer max/leader-def
+        :prefix "M-SPC")
+
+      (defun max/split-right ()
+        "vertical split then move the cursor to the right"
+        (interactive)
+        (split-window-right)
+        (windmove-right))
+
+      (defun max/split-below ()
+        "vertical split then move the cursor to the right"
+        (interactive)
+        (split-window-below)
+        (windmove-down))
+
+      (max/leader-def
+        "."  '(counsel-find-file :which-key "find file")
+        "f"  '(:ignore t :which-key "files")
+        "ff" '(counsel-find-file :which-key "find file")
+        "fs" '(save-buffer :which-key "save file")
+        "b"  '(:ignore t :which-key "buffers")
+        "bb" '(counsel-switch-buffer :which-key "switch buffer")
+        "bk" '(kill-buffer :which-key "kill buffer")
+        "bp" '(previous-buffer :which-key "preivous buffer")
+        "bn" '(next-buffer :which-key "next buffer")
+        "w"  '(:ignore t :which-key "window management")
+        "wl" '(windmove-right :which-key "focus right")
+        "wh" '(windmove-left :which-key "focus left")
+        "wk" '(windmove-up :which-key "focus up")
+        "wj" '(windmove-down :which-key "focus down")
+        "wv" '(max/split-right :which-key "split right")
+        "ws" '(max/split-below :which-key "split below")
+        "wc" '(delete-window :which-key "close window")
+        "n"  '(:ignore t :which-key "org-roam")
+        "nn" '(org-roam-node-find :which-key "open/create node")
+        "ni" '(org-roam-node-insert :which-key "insert node")
+        "nl" '(org-roam-buffer-toggle :which-key "back links")
+        "p"  'projectile-command-map
+        "g"  '(:ignore t :which-key "magit")
+        "gg" '(magit :which-key "magit status")
+        "gd" '(magit-diff :which-key "magit diff")
+        "m"  'bookmark-map))
+
+    ;; Custom backspace
+    (defun max/backspace-whitespace-to-tab-stop ()
+      "Delete whitespace backwards to the next tab-stop, otherwise delete one character."
+      (interactive)
+      (if (or indent-tabs-mode (use-region-p)
+              (> (point)
+                 (save-excursion
+                   (back-to-indentation)
+                   (point))))
+          (call-interactively 'backward-delete-char)
+        (let ((step (% (current-column) tab-width))
+              (pt (point)))
+          (when (zerop step)
+            (setq step tab-width))
+          ;; Account for edge case near beginning of buffer.
+          (setq step (min (- pt 1) step))
+          (save-match-data
+            (if (string-match "[^\t ]*\\([\t ]+\\)$"
+                              (buffer-substring-no-properties
+                               (- pt step) pt))
+                (backward-delete-char (- (match-end 1)
+                                         (match-beginning 1)))
+              (call-interactively 'backward-delete-char))))))
+
+    (general-define-key
+     :keymaps 'prog-mode-map
+     "<backspace>" 'max/backspace-whitespace-to-tab-stop)
+
+#+end_src
+** Smartparens
+#+begin_src emacs-lisp
+
+  (use-package smartparens
+    :hook (prog-mode text-mode org-mode)
     :config
-    ;; SPC leader key
-    (global-unset-key (kbd "M-SPC"))
-    (general-create-definer max/leader-def
-      :prefix "M-SPC")
+    (require 'smartparens-config))
 
-    (max/leader-def
-      "."  '(counsel-find-file :which-key "find file")
-      "f"  '(:ignore t :which-key "files")
-      "ff" '(counsel-find-file :which-key "find file")
-      "fs" '(save-buffer :which-key "save file")
-      "b"  '(:ignore t :which-key "buffers")
-      "bb" '(counsel-switch-buffer :which-key "switch buffer")
-      "bk" '(kill-buffer :which-key "kill buffer")
-      "bp" '(previous-buffer :which-key "preivous buffer")
-      "bn" '(next-buffer :which-key "next buffer")
-      "p"  'projectile-command-map
-      "g"  '(:ignore t :which-key "magit")
-      "gg" '(magit :which-key "magit status")
-      "gd" '(magit-diff :which-key "magit diff")
-      "m"  'bookmark-map))
+#+end_src
+** Org-roam
+#+begin_src emacs-lisp
 
-  ;; Custom backspace
-  (defun max/backspace-whitespace-to-tab-stop ()
-    "Delete whitespace backwards to the next tab-stop, otherwise delete one character."
-    (interactive)
-    (if (or indent-tabs-mode (use-region-p)
-            (> (point)
-               (save-excursion
-                 (back-to-indentation)
-                 (point))))
-        (call-interactively 'backward-delete-char)
-      (let ((step (% (current-column) tab-width))
-            (pt (point)))
-        (when (zerop step)
-          (setq step tab-width))
-        ;; Account for edge case near beginning of buffer.
-        (setq step (min (- pt 1) step))
-        (save-match-data
-          (if (string-match "[^\t ]*\\([\t ]+\\)$"
-                            (buffer-substring-no-properties
-                             (- pt step) pt))
-              (backward-delete-char (- (match-end 1)
-                                       (match-beginning 1)))
-            (call-interactively 'backward-delete-char))))))
-
-  (general-define-key
-   :keymaps 'prog-mode-map
-   "<backspace>" 'max/backspace-whitespace-to-tab-stop)
+  (use-package org-roam
+    :init
+    (setq org-roam-v2-ack t)
+    :custom
+    (org-roam-directory  "~/Nextcloud/RoamNotes")
+    :config
+    (org-roam-setup))
 
 #+end_src
 ** Themes
@@ -256,6 +299,13 @@
     :hook ((org-mode org-agenda-mode) . olivetti-mode))
 
 #+end_src
+** Japanese input
+#+begin_src emacs-lisp
+
+  (use-package mozc
+    :config (setq default-input-method "japanese-mozc"))
+
+#+end_src
 * LSP
 ** LSP setup
 #+begin_src emacs-lisp
@@ -304,14 +354,26 @@
     (setq indent-tabs-mode nil)
     (setq tab-width 4)
     (setq tab-always-indent nil)
+    (setq go-ts-mode-indent-offset 4)
 
     (whitespace-mode 1)
-    (setq whitespace-newline 'newline-mark))  
+    (setq whitespace-newline 'newline-mark))
 
-  (use-package go-mode
-    :mode "\\.go\\'"
-    :hook
-    (go-mode . lsp-deferred)
-    (go-mode . max/go-mode-hook))
+  (add-hook 'go-ts-mode-hook (lambda () (lsp-deferred)))
+  (add-hook 'go-ts-mode-hook (lambda () (max/go-mode-hook)))
+
+#+end_src
+** Tree sitter
+#+begin_src emacs-lisp
+
+  (setq major-mode-remap-alist
+        '((python-mode        . python-ts-mode)
+          (js-mode            . js-ts-mode)
+          (go-mode            . go-ts-mode)
+          (typescript-mode    . typescript-ts-mode)
+          (json-mode          . json-ts-mode)
+          (yaml-mode          . yaml-ts-mode)
+          (html-mode          . html-ts-mode)
+          (css-mode           . css-ts-mode)))
 
 #+end_src
