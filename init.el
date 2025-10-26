@@ -9,14 +9,12 @@
 (setq display-line-numbers-type 'relative)  ; Relative line numbers
 (global-display-line-numbers-mode t)        ; Show line numbers
 (column-number-mode nil)                    ; Show column in mode line
+(setq display-line-numbers-width 3)
 
 ;; Theme
-(load-theme 'wombat)
-
-;; Better scrolling
-(setq scroll-conservatively 100)        ; Smooth scrolling
-(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
-(setq mouse-wheel-progressive-speed nil)
+(load-theme 'modus-vivendi-tritanopia)
+(set-face-attribute 'default nil :font "JetBrainsMono Nerd Font" :height 140)
+(add-to-list 'default-frame-alist '(alpha . 80))
 
 ;; Show matching parentheses
 (show-paren-mode t)
