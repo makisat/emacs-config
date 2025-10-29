@@ -14,14 +14,14 @@
 ;; Theme
 (load-theme 'modus-vivendi-tritanopia)
 (set-face-attribute 'default nil :font "JetBrainsMono Nerd Font" :height 140)
-(add-to-list 'default-frame-alist '(alpha . 80))
+;(add-to-list 'default-frame-alist '(alpha . 80))
 
 ;; Show matching parentheses
 (show-paren-mode t)
 
 ;; Auto-save and backup files in one place
-(setq backup-directory-alist '(("." . "~/.config/emacs/backups")))
-(setq auto-save-file-name-transforms '((".*" "~/.config/emacs/auto-save/" t)))
+(setq backup-directory-alist '(("." . "~/.emacs/backups")))
+(setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save/" t)))
 
 ;; Refresh buffers when files change on disk
 (global-auto-revert-mode t)
@@ -115,11 +115,11 @@
 
 ;; Cape - completion-at-point extensions
 (use-package cape
-    :init
+  :init
   ;; Add useful completion-at-point functions
-  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
   (add-to-list 'completion-at-point-functions #'cape-file)
   (add-to-list 'completion-at-point-functions #'cape-elisp-block)
+  ;;(add-to-list 'completion-at-point-functions #'cape-dabbrev)
   ;;(add-to-list 'completion-at-point-functions #'cape-history)
   ;;(add-to-list 'completion-at-point-functions #'cape-keyword)
   ;;(add-to-list 'completion-at-point-functions #'cape-tex)
@@ -274,7 +274,6 @@
   (org-pretty-entities t)
   (org-startup-indented t)       ; Enable org-indent-mode by default
   (org-startup-folded 'content)  ; Start with content visible
-  (org-ellipsis " ▾")            ; Nicer ellipsis
   (org-cycle-separator-lines 2)
   
   ;; Editing behavior
@@ -286,30 +285,11 @@
   (org-confirm-babel-evaluate nil)
   (org-support-shift-select t))
 
-;; Org modern - beautiful org-mode styling
-(use-package org-modern
-  :hook
-  (org-mode . org-modern-mode)
-  (org-agenda-finalize . org-modern-agenda)
-  :custom
-  (org-modern-keyword nil)
-  (org-modern-checkbox nil)
-  (org-modern-table nil))
-
 ;; Better org bullets
 (use-package org-bullets
   :hook (org-mode . org-bullets-mode)
   :custom
   (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
-
-;; Org appear - show emphasis markers when cursor is on them
-(use-package org-appear
-  :hook (org-mode . org-appear-mode)
-  :custom
-  (org-appear-autolinks t)
-  (org-appear-autosubmarkers t)
-  (org-appear-autoentities t)
-  (org-appear-autokeywords t))
 
 ;; Org roam for note-taking (Zettelkasten method)
 (use-package org-roam
@@ -325,38 +305,8 @@
   :config
   (org-roam-db-autosync-mode))
 
-;; All the icons - icon fonts for Emacs
-(use-package all-the-icons
-  :if (display-graphic-p)
-  :config
-  ;; Run M-x all-the-icons-install-fonts on first use
-  (unless (member "all-the-icons" (font-family-list))
-    (all-the-icons-install-fonts t)))
-
-;; Icons for completion (corfu/company)
-(use-package all-the-icons-completion
-  :after (all-the-icons marginalia)
-  :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
-  :config
-  (all-the-icons-completion-mode))
-
-;; Icons for ibuffer
-(use-package all-the-icons-ibuffer
-  :after all-the-icons
-  :hook (ibuffer-mode . all-the-icons-ibuffer-mode)
-  :custom
-  (all-the-icons-ibuffer-formats
-   '((mark modified read-only locked
-           " " (icon 2 2 :left :elide)
-           " " (name 18 18 :left :elide)
-           " " (size 9 -1 :right)
-           " " (mode 16 16 :left :elide)
-           " " filename-and-process)
-     (mark " " (name 16 -1) " " filename))))
-
 ;; Nerd icons (modern alternative to all-the-icons)
 (use-package nerd-icons
-  ;; Run M-x nerd-icons-install-fonts on first use
   :custom
   (nerd-icons-font-family "Symbols Nerd Font Mono"))
 
@@ -364,45 +314,3 @@
 (use-package nerd-icons-dired
   :after nerd-icons
   :hook (dired-mode . nerd-icons-dired-mode))
-
-;; Nerd icons for corfu
-(use-package nerd-icons-corfu
-  :after (nerd-icons corfu)
-  :config
-  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
-
-;; Nerd icons for ibuffer
-(use-package nerd-icons-ibuffer
-  :after nerd-icons
-  :hook (ibuffer-mode . nerd-icons-ibuffer-mode))
-
-;; Nerd icons for completion
-(use-package nerd-icons-completion
-  :after (nerd-icons marginalia)
-  :config
-  (nerd-icons-completion-mode)
-  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
-
-;; Mode line with icons (doom-modeline - highly recommended)
-(use-package doom-modeline
-  :init (doom-modeline-mode 1)
-  :custom
-  (doom-modeline-height 25)
-  (doom-modeline-bar-width 3)
-  (doom-modeline-icon t)
-  (doom-modeline-major-mode-icon t)
-  (doom-modeline-major-mode-color-icon t)
-  (doom-modeline-buffer-file-name-style 'truncate-upto-project)
-  (doom-modeline-buffer-state-icon t)
-  (doom-modeline-buffer-modification-icon t)
-  (doom-modeline-minor-modes nil)
-  (doom-modeline-enable-word-count nil)
-  (doom-modeline-buffer-encoding t)
-  (doom-modeline-indent-info nil)
-  (doom-modeline-checker-simple-format t)
-  (doom-modeline-vcs-max-length 12)
-  (doom-modeline-env-version t)
-  (doom-modeline-irc-stylize 'identity)
-  (doom-modeline-github-interval (* 30 60))
-  (doom-modeline-gnus-timer 2))
-
