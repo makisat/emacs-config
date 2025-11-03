@@ -14,7 +14,7 @@
 ;; Theme
 (load-theme 'modus-vivendi-tritanopia)
 (set-face-attribute 'default nil :font "JetBrainsMono Nerd Font" :height 140)
-;(add-to-list 'default-frame-alist '(alpha . 80))
+; (add-to-list 'default-frame-alist '(alpha . 80))
 
 ;; Show matching parentheses
 (show-paren-mode t)
@@ -273,7 +273,7 @@
   (org-hide-emphasis-markers t)  ; Hide markup markers like * and /
   (org-pretty-entities t)
   (org-startup-indented t)       ; Enable org-indent-mode by default
-  (org-startup-folded 'content)  ; Start with content visible
+  ; (org-startup-folded 'content)  ; Start with content visible
   (org-cycle-separator-lines 2)
   
   ;; Editing behavior
@@ -314,3 +314,8 @@
 (use-package nerd-icons-dired
   :after nerd-icons
   :hook (dired-mode . nerd-icons-dired-mode))
+
+(use-package racket-mode)
+
+(use-package slime
+  :config (setq inferior-lisp-program "sbcl"))
