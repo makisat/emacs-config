@@ -14,14 +14,10 @@
 ;; Theme
 (load-theme 'modus-vivendi-tritanopia)
 (set-face-attribute 'default nil :font "JetBrainsMono Nerd Font" :height 140)
-<<<<<<< HEAD
-(add-to-list 'default-frame-alist '(alpha . 80))
-=======
-; (add-to-list 'default-frame-alist '(alpha . 80))
->>>>>>> a59b93a878f35a3d47212531bebde86251d50f5e
+(add-to-list 'default-frame-alist '(alpha-background . 80))
 
 ;; Show matching parentheses
-(show-paren-mode t)
+; (show-paren-mode -1)
 
 ;; Auto-save and backup files in one place
 (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
@@ -31,7 +27,7 @@
 (global-auto-revert-mode t)
 
 ;; Remember cursor position in files
-(save-place-mode t)
+; (save-place-mode t)
 
 ;; Use spaces instead of tabs
 (setq-default indent-tabs-mode nil)
@@ -41,7 +37,7 @@
 (delete-selection-mode t)
 
 ;; Automatic pair closing
-(electric-pair-mode t)
+;(electric-pair-mode t)
 
 ;; Remember recently edited files
 (recentf-mode t)
@@ -323,3 +319,5 @@
 
 (use-package slime
   :config (setq inferior-lisp-program "sbcl"))
+
+(use-package rust-mode)
