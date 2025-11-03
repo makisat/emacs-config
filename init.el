@@ -14,7 +14,11 @@
 ;; Theme
 (load-theme 'modus-vivendi-tritanopia)
 (set-face-attribute 'default nil :font "JetBrainsMono Nerd Font" :height 140)
+<<<<<<< HEAD
 (add-to-list 'default-frame-alist '(alpha . 80))
+=======
+; (add-to-list 'default-frame-alist '(alpha . 80))
+>>>>>>> a59b93a878f35a3d47212531bebde86251d50f5e
 
 ;; Show matching parentheses
 (show-paren-mode t)
@@ -314,3 +318,8 @@
 (use-package nerd-icons-dired
   :after nerd-icons
   :hook (dired-mode . nerd-icons-dired-mode))
+
+(use-package racket-mode)
+
+(use-package slime
+  :config (setq inferior-lisp-program "sbcl"))
