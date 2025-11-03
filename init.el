@@ -14,13 +14,13 @@
 ;; Theme
 (load-theme 'modus-vivendi-tritanopia)
 (set-face-attribute 'default nil :font "JetBrainsMono Nerd Font" :height 140)
-;(add-to-list 'default-frame-alist '(alpha . 80))
+(add-to-list 'default-frame-alist '(alpha . 80))
 
 ;; Show matching parentheses
 (show-paren-mode t)
 
 ;; Auto-save and backup files in one place
-(setq backup-directory-alist '(("." . "~/.emacs/backups")))
+(setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
 (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save/" t)))
 
 ;; Refresh buffers when files change on disk
@@ -273,7 +273,7 @@
   (org-hide-emphasis-markers t)  ; Hide markup markers like * and /
   (org-pretty-entities t)
   (org-startup-indented t)       ; Enable org-indent-mode by default
-  (org-startup-folded 'content)  ; Start with content visible
+  ; (org-startup-folded 'content)  ; Start with content visible
   (org-cycle-separator-lines 2)
   
   ;; Editing behavior
