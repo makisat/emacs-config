@@ -321,3 +321,5 @@
   :config (setq inferior-lisp-program "sbcl"))
 
 (use-package rust-mode)
+
+(use-package zig-mode)
