@@ -95,11 +95,11 @@
   (corfu-auto t)                    ; Enable auto completion
   (corfu-auto-delay 0.2)            ; Delay before showing completions
   (corfu-auto-prefix 2)             ; Minimum prefix length for auto completion
-  (corfu-separator ?\s)             ; Orderless field separator
-  (corfu-quit-no-match 'separator)  ; Don't quit if there's no match
-  (corfu-preview-current nil)       ; Don't preview current candidate
-  (corfu-preselect 'prompt)         ; Preselect the prompt
-  (corfu-on-exact-match nil)        ; Don't auto-expand exact matches
+  ;; (corfu-separator ?\s)             ; Orderless field separator
+  ;; (corfu-quit-no-match 'separator)  ; Don't quit if there's no match
+  ;; (corfu-preview-current nil)       ; Don't preview current candidate
+  ;; (corfu-preselect 'prompt)         ; Preselect the prompt
+  ;; (corfu-on-exact-match nil)        ; Don't auto-expand exact matches
   (corfu-scroll-margin 5)           ; Margin when scrolling
   :bind
   (:map corfu-map
@@ -283,7 +283,8 @@
   (org-edit-src-content-indentation 0)
   (org-src-fontify-natively t)   ; Syntax highlight in source blocks
   (org-confirm-babel-evaluate nil)
-  (org-support-shift-select t))
+  (org-support-shift-select t)
+  :hook (org-mode . visual-line-mode))
 
 ;; Better org bullets
 (use-package org-bullets
@@ -323,3 +324,5 @@
 (use-package rust-mode)
 
 (use-package zig-mode)
+
+(use-package go-mode)
