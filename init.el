@@ -12,7 +12,7 @@
 (setq display-line-numbers-width 3)
 
 ;; Theme
-(load-theme 'modus-vivendi-tritanopia)
+;; (load-theme 'modus-vivendi-tritanopia)
 (set-face-attribute 'default nil :font "JetBrainsMono Nerd Font" :height 140)
 (add-to-list 'default-frame-alist '(alpha-background . 80))
 
@@ -110,8 +110,9 @@
         ("RET" . corfu-insert)
         ("M-d" . corfu-show-documentation)
         ("M-l" . corfu-show-location))
-  :init
-  (global-corfu-mode))
+  ;; :init
+  ;; (global-corfu-mode))
+  :hook (prog-mode . corfu-mode))
 
 ;; Cape - completion-at-point extensions
 (use-package cape
@@ -284,7 +285,17 @@
   (org-src-fontify-natively t)   ; Syntax highlight in source blocks
   (org-confirm-babel-evaluate nil)
   (org-support-shift-select t)
-  :hook (org-mode . visual-line-mode))
+  :hook ((org-mode . visual-line-mode)
+         (org-mode . (lambda () (display-line-numbers-mode -1)))))
+
+(use-package olivetti
+  :hook (org-mode . olivetti-mode))
+
+(use-package doom-themes
+  :config (load-theme 'doom-tomorrow-night t))
+
+(use-package doom-modeline
+  :init (doom-modeline-mode 1))
 
 ;; Better org bullets
 (use-package org-bullets
@@ -326,3 +337,18 @@
 (use-package zig-mode)
 
 (use-package go-mode)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("4594d6b9753691142f02e67b8eb0fda7d12f6cc9f1299a49b819312d6addad1d"
+     "7771c8496c10162220af0ca7b7e61459cb42d18c35ce272a63461c0fc1336015"
+     default)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
