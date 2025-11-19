@@ -11,13 +11,9 @@
 (column-number-mode nil)                    ; Show column in mode line
 (setq display-line-numbers-width 3)
 
-;; Theme
-;; (load-theme 'modus-vivendi-tritanopia)
+;; Visual
 (set-face-attribute 'default nil :font "JetBrainsMono Nerd Font" :height 140)
 (add-to-list 'default-frame-alist '(alpha-background . 80))
-
-;; Show matching parentheses
-; (show-paren-mode -1)
 
 ;; Auto-save and backup files in one place
 (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
@@ -26,18 +22,9 @@
 ;; Refresh buffers when files change on disk
 (global-auto-revert-mode t)
 
-;; Remember cursor position in files
-; (save-place-mode t)
-
 ;; Use spaces instead of tabs
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
-
-;; Delete selection when typing
-(delete-selection-mode t)
-
-;; Automatic pair closing
-;(electric-pair-mode t)
 
 ;; Remember recently edited files
 (recentf-mode t)
@@ -80,15 +67,12 @@
 (use-package marginalia
   :init (marginalia-mode))
 
-;; Orderless - flexible completion style
 (use-package orderless
-  
   :custom
   (completion-styles '(orderless basic))
   (completion-category-defaults nil)
   (completion-category-overrides '((file (styles partial-completion)))))
 
-;; Corfu - in-buffer completion popup
 (use-package corfu
   :custom
   (corfu-cycle t)                   ; Cycle through candidates
@@ -114,7 +98,6 @@
   ;; (global-corfu-mode))
   :hook (prog-mode . corfu-mode))
 
-;; Cape - completion-at-point extensions
 (use-package cape
   :init
   ;; Add useful completion-at-point functions
@@ -149,24 +132,10 @@
    ("C-c p &" . cape-sgml)
    ("C-c p r" . cape-rfc1345)))
 
-;; Corfu terminal support (for terminal Emacs)
-(use-package corfu-terminal
-  :if (not (display-graphic-p))
-  :config
-  (corfu-terminal-mode +1))
-
-;; Add icons to Corfu
-(use-package kind-icon
-  :after corfu
-  :custom
-  (kind-icon-default-face 'corfu-default)
-  :config
-  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
-
 (use-package vterm
   :custom
   ;; Performance and behavior
-  (vterm-max-scrollback 10000)
+  (vterm-max-scrollback 1000)
   (vterm-buffer-name-string "vterm %s")
   (vterm-kill-buffer-on-exit t)
   (vterm-clear-scrollback-when-clearing t)
@@ -177,40 +146,14 @@
   
   ;; Don't query on exit
   (vterm-always-compile-module t)
-  
   :bind
-  (;("C-c C-t" . vterm)
-   (:map vterm-mode-map ; Open new vterm
-        ("C-q" . vterm-send-next-key)  ; Send next key literally
-        ("M-," . vterm-copy-mode)))       ; Enter copy mode
+  ("C-c t" . vterm)
 
-  
   :config
-  ;; Don't use line numbers in vterm
   (add-hook 'vterm-mode-hook
             (lambda ()
               (display-line-numbers-mode -1)
               (setq-local global-hl-line-mode nil))))
-
-;; Multi-vterm for managing multiple terminals
-(use-package multi-vterm
-  ;:after vterm
-  :bind
-  (("C-c t t" . multi-vterm)
-   ("C-c t n" . multi-vterm-next)
-   ("C-c t p" . multi-vterm-prev)))
-
-;; vterm-toggle for quick terminal access
-(use-package vterm-toggle
-  ;:after vterm
-  :custom
-  (vterm-toggle-fullscreen-p nil)
-  (vterm-toggle-scope 'project)
-  :bind
-  (("C-`" . vterm-toggle)
-   ("C-~" . vterm-toggle-cd)
-   :map vterm-mode-map
-   ("C-`" . vterm-toggle)))
 
 (use-package move-text
   :config
@@ -249,7 +192,6 @@
   :bind
   ("C-c g" . magit))
 
-;; Show git diff indicators in the fringe
 (use-package diff-hl
   :hook
   ((prog-mode . diff-hl-mode)
@@ -337,6 +279,8 @@
 (use-package zig-mode)
 
 (use-package go-mode)
+
+(use-package markdown-mode)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
