@@ -228,6 +228,7 @@
   (org-confirm-babel-evaluate nil)
   (org-support-shift-select t)
   :hook ((org-mode . visual-line-mode)
+         (org-mode . flyspell-mode)
          (org-mode . (lambda () (display-line-numbers-mode -1)))))
 
 (use-package olivetti
