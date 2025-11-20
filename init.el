@@ -231,6 +231,15 @@
          (org-mode . flyspell-mode)
          (org-mode . (lambda () (display-line-numbers-mode -1)))))
 
+;; To make latex-preview to work
+(require 'cl-lib)
+
+(with-eval-after-load 'org
+  (setq org-latex-default-packages-alist
+        (cl-remove-if (lambda (entry)
+                        (string-match-p "ulem" (nth 1 entry))) ; package name is 2nd element
+                      org-latex-default-packages-alist)))
+
 (use-package olivetti
   :hook (org-mode . olivetti-mode))
 
