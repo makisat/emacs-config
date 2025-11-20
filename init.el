@@ -229,7 +229,9 @@
   (org-support-shift-select t)
   :hook ((org-mode . visual-line-mode)
          (org-mode . flyspell-mode)
-         (org-mode . (lambda () (display-line-numbers-mode -1)))))
+         (org-mode . (lambda () (display-line-numbers-mode -1)))
+         (org-agenda-mode . (lambda () (display-line-numbers-mode -1))))
+  :bind ("C-c a" . org-agenda))
 
 ;; To make latex-preview to work
 (require 'cl-lib)
@@ -241,7 +243,8 @@
                       org-latex-default-packages-alist)))
 
 (use-package olivetti
-  :hook (org-mode . olivetti-mode))
+  :hook ((org-mode . olivetti-mode)
+         (org-agenda-mode . olivetti-mode)))
 
 (use-package doom-themes
   :config (load-theme 'doom-tomorrow-night t))
