@@ -210,7 +210,7 @@
 (use-package org
   :custom
   ;; Directory settings
-  (org-agenda-files '("~/Nextcloud/RoamNotes/"))
+  (org-agenda-files '("~/gdrive/RoamNotes/"))
   
   ;; Appearance
   (org-hide-emphasis-markers t)  ; Hide markup markers like * and /
@@ -248,7 +248,7 @@
 ;; Org roam for note-taking (Zettelkasten method)
 (use-package org-roam
   :custom
-  (org-roam-directory "~/Nextcloud/RoamNotes/")
+  (org-roam-directory "~/gdrive/RoamNotes/")
   (org-roam-completion-everywhere t)
   :bind
   (("C-c n l" . org-roam-buffer-toggle)
