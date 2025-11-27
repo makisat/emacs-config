@@ -37,6 +37,8 @@
 
 (global-set-key (kbd "C-.") 'duplicate-line)
 
+(global-set-key (kbd "C-c a") 'org-agenda)
+
 ;; Straight.el bootstrap
 (defvar bootstrap-version)
 (let ((bootstrap-file
@@ -301,13 +303,16 @@
 
 (use-package markdown-mode)
 
+(use-package web-mode)
+(add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
+
 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.ts\\'" . tsx-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . tsx-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.js\\'" . tsx-ts-mode))
 
-(add-to-list 'auto-mode-alist '("\\.c\\'" . c-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.cpp\\'" . c++-ts-mode))
+;; (add-to-list 'auto-mode-alist '("\\.c\\'" . c-ts-mode))
+;; (add-to-list 'auto-mode-alist '("\\.cpp\\'" . c++-ts-mode))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -317,7 +322,11 @@
  '(custom-safe-themes
    '("4594d6b9753691142f02e67b8eb0fda7d12f6cc9f1299a49b819312d6addad1d"
      "7771c8496c10162220af0ca7b7e61459cb42d18c35ce272a63461c0fc1336015"
-     default)))
+     default))
+ '(whitespace-style
+   '(face trailing tabs spaces lines newline missing-newline-at-eof empty
+          indentation space-after-tab space-before-tab space-mark
+          tab-mark newline-mark)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
