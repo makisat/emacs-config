@@ -134,28 +134,28 @@
    ("C-c p &" . cape-sgml)
    ("C-c p r" . cape-rfc1345)))
 
-(use-package vterm
-  :custom
-  ;; Performance and behavior
-  (vterm-max-scrollback 1000)
-  (vterm-buffer-name-string "vterm %s")
-  (vterm-kill-buffer-on-exit t)
-  (vterm-clear-scrollback-when-clearing t)
+;; (use-package vterm
+;;   :custom
+;;   ;; Performance and behavior
+;;   (vterm-max-scrollback 1000)
+;;   (vterm-buffer-name-string "vterm %s")
+;;   (vterm-kill-buffer-on-exit t)
+;;   (vterm-clear-scrollback-when-clearing t)
   
-  ;; Shell configuration
-  (vterm-shell (executable-find "fish"))
-  (vterm-timer-delay 0.01)
+;;   ;; Shell configuration
+;;   (vterm-shell (executable-find "fish"))
+;;   (vterm-timer-delay 0.01)
   
-  ;; Don't query on exit
-  (vterm-always-compile-module t)
-  :bind
-  ("C-c t" . vterm)
+;;   ;; Don't query on exit
+;;   (vterm-always-compile-module t)
+;;   :bind
+;;   ("C-c t" . vterm)
 
-  :config
-  (add-hook 'vterm-mode-hook
-            (lambda ()
-              (display-line-numbers-mode -1)
-              (setq-local global-hl-line-mode nil))))
+;;   :config
+;;   (add-hook 'vterm-mode-hook
+;;             (lambda ()
+;;               (display-line-numbers-mode -1)
+;;               (setq-local global-hl-line-mode nil))))
 
 (use-package move-text
   :config
@@ -310,6 +310,11 @@
 (add-to-list 'auto-mode-alist '("\\.ts\\'" . tsx-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . tsx-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.js\\'" . tsx-ts-mode))
+
+(global-set-key (kbd "C-c t")
+  (lambda ()
+    (interactive)
+    (start-process "ghostty" nil "ghostty" "--window-inherit-working-directory")))
 
 ;; (add-to-list 'auto-mode-alist '("\\.c\\'" . c-ts-mode))
 ;; (add-to-list 'auto-mode-alist '("\\.cpp\\'" . c++-ts-mode))
