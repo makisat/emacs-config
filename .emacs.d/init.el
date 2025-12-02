@@ -1,9 +1,10 @@
 ;; Better defaults
-(setq inhibit-startup-message t)        ; Skip startup screen
-(tool-bar-mode -1)                      ; Disable toolbar
-(menu-bar-mode -1)                      ; Disable menu bar
-(scroll-bar-mode -1)                    ; Disable scrollbar
-(setq ring-bell-function 'ignore)       ; Disable bell
+(setq inhibit-startup-message t)         ; Skip startup screen
+(tool-bar-mode -1)                       ; Disable toolbar
+(menu-bar-mode -1)                       ; Disable menu bar
+(scroll-bar-mode -1)                     ; Disable scrollbar
+(setq ring-bell-function 'ignore)        ; Disable bell
+(set-frame-parameter nil 'undecorated t) ; Disable titlebar
 
 ;; Line numbers and columns
 (setq display-line-numbers-type 'relative)  ; Relative line numbers
@@ -212,7 +213,7 @@
 (use-package org
   :custom
   ;; Directory settings
-  (org-agenda-files '("~/gdrive/RoamNotes/"))
+  (org-agenda-files '("~/Sync/RoamNotes/"))
   
   ;; Appearance
   (org-hide-emphasis-markers t)  ; Hide markup markers like * and /
@@ -263,7 +264,7 @@
 ;; Org roam for note-taking (Zettelkasten method)
 (use-package org-roam
   :custom
-  (org-roam-directory "~/gdrive/RoamNotes/")
+  (org-roam-directory "~/Sync/RoamNotes/")
   (org-roam-completion-everywhere t)
   :bind
   (("C-c n l" . org-roam-buffer-toggle)
