@@ -41,10 +41,10 @@
 (global-set-key (kbd "C-c a") 'org-agenda)
 
 ;; Add registers
-(global-set-key (kbd "C-c SPC 1") (lambda () (interactive) (point-to-register ?1) (message "Jumped to 1")))
-(global-set-key (kbd "C-c SPC 2") (lambda () (interactive) (point-to-register ?2) (message "Jumped to 2")))
-(global-set-key (kbd "C-c SPC 3") (lambda () (interactive) (point-to-register ?3) (message "Jumped to 3")))
-(global-set-key (kbd "C-c SPC 4") (lambda () (interactive) (point-to-register ?4) (message "Jumped to 4")))
+(global-set-key (kbd "C-c SPC 1") (lambda () (interactive) (point-to-register ?1) (message "Added 1")))
+(global-set-key (kbd "C-c SPC 2") (lambda () (interactive) (point-to-register ?2) (message "Added 2")))
+(global-set-key (kbd "C-c SPC 3") (lambda () (interactive) (point-to-register ?3) (message "Added 3")))
+(global-set-key (kbd "C-c SPC 4") (lambda () (interactive) (point-to-register ?4) (message "Added 4")))
 
 ;; Jump between the registers
 (global-set-key (kbd "C-c 1") (lambda () (interactive) (jump-to-register ?1)))
@@ -225,7 +225,7 @@
 (use-package org
   :custom
   ;; Directory settings
-  (org-agenda-files '("~/Sync/RoamNotes/"))
+  (org-agenda-files '("~/Sync/Todos/"))
   
   ;; Appearance
   (org-hide-emphasis-markers t)  ; Hide markup markers like * and /
@@ -247,6 +247,9 @@
          (org-mode . (lambda () (display-line-numbers-mode -1)))
          (org-agenda-mode . (lambda () (display-line-numbers-mode -1))))
   :bind ("C-c a" . org-agenda))
+
+;; Start the agenda on the current day (not previous Monday)
+(setq org-agenda-start-on-weekday nil)
 
 ;; To make latex-preview to work
 (require 'cl-lib)
