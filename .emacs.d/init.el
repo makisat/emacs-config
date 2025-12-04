@@ -327,6 +327,8 @@
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . tsx-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.js\\'" . tsx-ts-mode))
 
+(add-to-list 'auto-mode-alist '("\\.pl\\'" . prolog-mode))
+
 (global-set-key (kbd "C-c t")
   (lambda ()
     (interactive)
