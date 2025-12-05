@@ -5,6 +5,7 @@
 (scroll-bar-mode -1)                     ; Disable scrollbar
 (setq ring-bell-function 'ignore)        ; Disable bell
 (add-to-list 'default-frame-alist '(undecorated . t)) ; Disable titlebar
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 ;; Line numbers and columns
 (setq display-line-numbers-type 'relative)  ; Relative line numbers
@@ -275,6 +276,14 @@
   :hook (org-mode . org-bullets-mode)
   :custom
   (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+
+(use-package org-modern
+  :config
+  (global-org-modern-mode)
+  (setq org-modern-star nil))
+
+(use-package indent-bars
+  :hook (prog-mode . indent-bars-mode))
 
 ;; Org roam for note-taking (Zettelkasten method)
 (use-package org-roam
