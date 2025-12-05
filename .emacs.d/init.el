@@ -4,7 +4,7 @@
 (menu-bar-mode -1)                       ; Disable menu bar
 (scroll-bar-mode -1)                     ; Disable scrollbar
 (setq ring-bell-function 'ignore)        ; Disable bell
-(set-frame-parameter nil 'undecorated t) ; Disable titlebar
+(add-to-list 'default-frame-alist '(undecorated . t)) ; Disable titlebar
 
 ;; Line numbers and columns
 (setq display-line-numbers-type 'relative)  ; Relative line numbers
