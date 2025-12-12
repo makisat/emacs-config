@@ -226,7 +226,7 @@
 (use-package org
   :custom
   ;; Directory settings
-  (org-agenda-files '("~/Sync/Todos/"))
+  (org-agenda-files '("~/Sync/OrgNotes/"))
   
   ;; Appearance
   (org-hide-emphasis-markers t)  ; Hide markup markers like * and /
@@ -337,6 +337,9 @@
 (add-to-list 'auto-mode-alist '("\\.js\\'" . tsx-ts-mode))
 
 (add-to-list 'auto-mode-alist '("\\.pl\\'" . prolog-mode))
+
+(with-eval-after-load 'eglot
+  (add-to-list 'eglot-ignored-server-capabilities :inlayHintProvider))
 
 (global-set-key (kbd "C-c t")
   (lambda ()
