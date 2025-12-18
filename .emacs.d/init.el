@@ -245,6 +245,8 @@
   (org-src-fontify-natively t)   ; Syntax highlight in source blocks
   (org-confirm-babel-evaluate nil)
   (org-support-shift-select t)
+  :config
+  (setq org-image-actual-width '(600))
   :hook ((org-mode . visual-line-mode)
          (org-mode . flyspell-mode)
          (org-mode . (lambda () (display-line-numbers-mode -1)))
@@ -359,6 +361,7 @@
 (add-to-list 'auto-mode-alist '("\\.js\\'" . tsx-ts-mode))
 
 (add-to-list 'auto-mode-alist '("\\.pl\\'" . prolog-mode))
+(setq prolog-system 'swi)
 
 (with-eval-after-load 'eglot
   (add-to-list 'eglot-ignored-server-capabilities :inlayHintProvider))
