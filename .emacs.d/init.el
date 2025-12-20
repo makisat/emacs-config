@@ -225,6 +225,16 @@
 (use-package mozc
   :config (setq default-input-method "japanese-mozc"))
 
+(global-set-key (kbd "C-c k")
+  (lambda ()
+    (interactive)
+    (set-input-method 'korean-hangul)))
+
+(global-set-key (kbd "C-c j")
+  (lambda ()
+    (interactive)
+    (set-input-method 'japanese-mozc)))
+
 (use-package org
   :custom
   ;; Directory settings
