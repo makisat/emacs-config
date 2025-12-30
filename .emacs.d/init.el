@@ -44,10 +44,10 @@
 (setq org-image-actual-width 500)
 
 ;; Add registers
-(global-set-key (kbd "C-c SPC 1") (lambda () (interactive) (point-to-register ?1) (message "Added 1")))
-(global-set-key (kbd "C-c SPC 2") (lambda () (interactive) (point-to-register ?2) (message "Added 2")))
-(global-set-key (kbd "C-c SPC 3") (lambda () (interactive) (point-to-register ?3) (message "Added 3")))
-(global-set-key (kbd "C-c SPC 4") (lambda () (interactive) (point-to-register ?4) (message "Added 4")))
+(global-set-key (kbd "C-c t 1") (lambda () (interactive) (point-to-register ?1) (message "Added 1")))
+(global-set-key (kbd "C-c t 2") (lambda () (interactive) (point-to-register ?2) (message "Added 2")))
+(global-set-key (kbd "C-c t 3") (lambda () (interactive) (point-to-register ?3) (message "Added 3")))
+(global-set-key (kbd "C-c t 4") (lambda () (interactive) (point-to-register ?4) (message "Added 4")))
 
 ;; Jump between the registers
 (global-set-key (kbd "C-c 1") (lambda () (interactive) (jump-to-register ?1)))
@@ -150,29 +150,6 @@
    ("C-c p &" . cape-sgml)
    ("C-c p r" . cape-rfc1345)))
 
-;; (use-package vterm
-;;   :custom
-;;   ;; Performance and behavior
-;;   (vterm-max-scrollback 1000)
-;;   (vterm-buffer-name-string "vterm %s")
-;;   (vterm-kill-buffer-on-exit t)
-;;   (vterm-clear-scrollback-when-clearing t)
-  
-;;   ;; Shell configuration
-;;   (vterm-shell (executable-find "fish"))
-;;   (vterm-timer-delay 0.01)
-  
-;;   ;; Don't query on exit
-;;   (vterm-always-compile-module t)
-;;   :bind
-;;   ("C-c t" . vterm)
-
-;;   :config
-;;   (add-hook 'vterm-mode-hook
-;;             (lambda ()
-;;               (display-line-numbers-mode -1)
-;;               (setq-local global-hl-line-mode nil))))
-
 (use-package move-text
   :config
   (move-text-default-bindings)
@@ -224,16 +201,6 @@
 
 (use-package mozc
   :config (setq default-input-method "japanese-mozc"))
-
-(global-set-key (kbd "C-c k")
-  (lambda ()
-    (interactive)
-    (set-input-method 'korean-hangul)))
-
-(global-set-key (kbd "C-c j")
-  (lambda ()
-    (interactive)
-    (set-input-method 'japanese-mozc)))
 
 (use-package org
   :custom
@@ -363,6 +330,12 @@
 
 (use-package haskell-mode)
 
+(use-package clojure-mode)
+(add-to-list 'auto-mode-alist '("\\.cl\\'" . clojure-mode))
+
+(use-package cider
+  :after clojure-mode)
+
 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.ts\\'" . tsx-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . tsx-ts-mode))
@@ -373,11 +346,6 @@
 
 (with-eval-after-load 'eglot
   (add-to-list 'eglot-ignored-server-capabilities :inlayHintProvider))
-
-(global-set-key (kbd "C-c t")
-  (lambda ()
-    (interactive)
-    (start-process "ghostty" nil "ghostty" "--window-inherit-working-directory")))
 
 ;; (add-to-list 'auto-mode-alist '("\\.c\\'" . c-ts-mode))
 ;; (add-to-list 'auto-mode-alist '("\\.cpp\\'" . c++-ts-mode))
