@@ -14,7 +14,7 @@
 (setq display-line-numbers-width 3)
 
 ;; Visual
-(set-face-attribute 'default nil :font "JetBrainsMono Nerd Font" :height 140)
+(set-face-attribute 'default nil :font "HackGen35 Console NF" :height 140)
 (add-to-list 'default-frame-alist '(alpha-background . 80))
 
 ;; Auto-save and backup files in one place
@@ -95,7 +95,7 @@
   :custom
   (corfu-cycle t)                   ; Cycle through candidates
   (corfu-auto t)                    ; Enable auto completion
-  (corfu-auto-delay 0.2)            ; Delay before showing completions
+  (corfu-auto-delay 0.1)            ; Delay before showing completions
   (corfu-auto-prefix 2)             ; Minimum prefix length for auto completion
   ;; (corfu-separator ?\s)             ; Orderless field separator
   ;; (corfu-quit-no-match 'separator)  ; Don't quit if there's no match
@@ -343,6 +343,12 @@
 
 (add-to-list 'auto-mode-alist '("\\.pl\\'" . prolog-mode))
 (setq prolog-system 'swi)
+
+(add-hook 'prog-mode-hook (lambda ()
+                           (eglot-ensure)
+                           (local-set-key (kbd "C-c l d") 'eglot-find-declaration)
+                           (local-set-key (kbd "C-c l h") 'eldoc)
+                           (local-set-key (kbd "C-c l r") 'eglot-rename)))
 
 (with-eval-after-load 'eglot
   (add-to-list 'eglot-ignored-server-capabilities :inlayHintProvider))
