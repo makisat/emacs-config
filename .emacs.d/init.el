@@ -40,6 +40,8 @@
 (global-set-key (kbd "C-.") 'duplicate-line)
 
 (global-set-key (kbd "C-c a") 'org-agenda)
+(add-hook 'org-mode-hook 'org-display-inline-images)
+(setq org-image-actual-width 500)
 
 ;; Add registers
 (global-set-key (kbd "C-c SPC 1") (lambda () (interactive) (point-to-register ?1) (message "Added 1")))
@@ -248,6 +250,15 @@
          (org-mode . (lambda () (display-line-numbers-mode -1)))
          (org-agenda-mode . (lambda () (display-line-numbers-mode -1))))
   :bind ("C-c a" . org-agenda))
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((python . t)
+   (shell . t)
+   (emacs-lisp . t)))
+
+(use-package org-download
+  :config (setq-default org-download-image-dir "~/Sync/Photos/Screenshots/"))
 
 ;; Start the agenda on the current day (not previous Monday)
 (setq org-agenda-start-on-weekday nil)
