@@ -351,9 +351,7 @@
 (use-package web-mode)
 (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
 
-(use-package clojure-mode)
-
-(use-package cider)
+(use-package haskell-mode)
 
 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.ts\\'" . tsx-ts-mode))
